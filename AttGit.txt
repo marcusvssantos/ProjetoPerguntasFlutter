@@ -3,3 +3,5 @@ git add .
 git status
 
 git commit -m "Descrição"
+
+git push oringin main
