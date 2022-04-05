@@ -5,3 +5,7 @@ git status
 git commit -m "Descrição"
 
 git push oringin main
+//
+
+git clone //faz o download de todo o arquivo
+
