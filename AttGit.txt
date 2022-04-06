@@ -10,5 +10,3 @@ git push oringin main
 git clone //faz o download de todo o arquivo
 
 git pull //baixa os "upgrades" feitos no código
-
-sss
