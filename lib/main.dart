@@ -18,7 +18,7 @@ class PerguntaAppState extends State<PerguntaApp> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> perguntas = [
+    final perguntas = [
       'Qual é sua cor favorita?',
       'Qual é o seu animal favorito',
     ];
