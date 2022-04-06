@@ -6,15 +6,14 @@ import 'package:flutter/material.dart';
 
 main() => runApp(PerguntaApp());
 
-class PerguntaApp extends StatelessWidget {
-  void responder() {
-    print('Pergunta Respondida');
-  }
+class PerguntaAppState extends State<PerguntaApp> {
+  var perguntaSelecionada = 0;
 
-  void Function() funcaoQueRetornaUmaOutraFuncao() {
-    return () {
-      print('Pergunta Respondida #02!');
-    };
+  void responder() {
+    setState(() {
+      perguntaSelecionada++;
+    });
+    print(perguntaSelecionada);
   }
 
   @override
@@ -31,7 +30,7 @@ class PerguntaApp extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Text(perguntas.elementAt(0)),
+            Text(perguntas[perguntaSelecionada]),
             // ignore: deprecated_member_use
             RaisedButton(
               child: Text('Resposta 1'),
@@ -44,11 +43,17 @@ class PerguntaApp extends StatelessWidget {
             ),
             RaisedButton(
               child: Text('Resposta 3'),
-              onPressed: funcaoQueRetornaUmaOutraFuncao(),
+              onPressed: responder,
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class PerguntaApp extends StatefulWidget {
+  PerguntaAppState createState() {
+    return PerguntaAppState();
   }
 }
