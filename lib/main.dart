@@ -1,60 +1,68 @@
-// ignore_for_file: avoid_print, prefer_const_constructors, unnecessary_import, deprecated_member_use, duplicate_ignore, use_key_in_widget_constructors
-// ignore: use_key_in_widget_constructors
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './questao.dart';
+import './resposta.dart';
 
-main() => runApp(PerguntaApp());
+void main() {
+  runApp(const PerguntaApp());
+}
+
+final _perguntas = const [
+  {
+    'texto': 'Qual é a sua cor favorita?',
+    'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco'],
+  },
+  {
+    'texto': 'Qual é o seu animal favorito?',
+    'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
+  },
+  {
+    'texto': 'Qual é o seu instrutor favorito?',
+    'respostas': ['Maria', 'João', 'Leo', 'Pedro'],
+  }
+];
+
+class PerguntaApp extends StatefulWidget {
+  const PerguntaApp({Key? key}) : super(key: key);
+
+  @override
+  State<PerguntaApp> createState() => _PerguntaAppState();
+}
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
 
   void _responder() {
-    setState(() {
-      _perguntaSelecionada++;
-    });
-    print(_perguntaSelecionada);
+    if (temPerguntaSelecionada) {
+      setState(() {
+        _perguntaSelecionada++;
+      });
+    }
+  }
+
+  bool get temPerguntaSelecionada {
+    return _perguntaSelecionada < _perguntas.length;
   }
 
   @override
   Widget build(BuildContext context) {
-    final perguntas = [
-      'Qual é sua cor favorita?',
-      'Qual é o seu animal favorito',
-    ];
+    List<String> respostas = temPerguntaSelecionada
+        ? _perguntas[_perguntaSelecionada].cast()['respostas']
+        : [];
 
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Perguntas'),
+          title: const Text('Perguntas'),
         ),
-        body: Column(
-          children: [
-            Questao(perguntas[_perguntaSelecionada]),
-            // ignore: deprecated_member_use
-            RaisedButton(
-              child: Text('Resposta 1'),
-              onPressed: _responder,
-            ),
-            // ignore: deprecated_member_use
-            RaisedButton(
-              child: Text('Resposta 2'),
-              onPressed: _responder,
-            ),
-            RaisedButton(
-              child: Text('Resposta 3'),
-              onPressed: _responder,
-            ),
-          ],
-        ),
+        body: temPerguntaSelecionada
+            ? Column(
+                children: [
+                  Questao(_perguntas[_perguntaSelecionada]['texto'].toString()),
+                  ...respostas.map((t) => Resposta(t, _responder)).toList(),
+                ],
+              )
+            : null,
       ),
     );
-  }
-}
-
-class PerguntaApp extends StatefulWidget {
-  _PerguntaAppState createState() {
-    return _PerguntaAppState();
   }
 }
