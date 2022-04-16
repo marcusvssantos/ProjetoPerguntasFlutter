@@ -1,25 +1,10 @@
 import 'package:flutter/material.dart';
-import './questao.dart';
-import './resposta.dart';
+import './questionario.dart';
+import './resultado.dart';
 
 void main() {
   runApp(const PerguntaApp());
 }
-
-final _perguntas = const [
-  {
-    'texto': 'Qual é a sua cor favorita?',
-    'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco'],
-  },
-  {
-    'texto': 'Qual é o seu animal favorito?',
-    'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
-  },
-  {
-    'texto': 'Qual é o seu instrutor favorito?',
-    'respostas': ['Maria', 'João', 'Leo', 'Pedro'],
-  }
-];
 
 class PerguntaApp extends StatefulWidget {
   const PerguntaApp({Key? key}) : super(key: key);
@@ -30,13 +15,51 @@ class PerguntaApp extends StatefulWidget {
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
+  var _pontuacaoTotal = 0;
+  final _perguntas = const [
+    {
+      'texto': 'Qual a Linguagem de Programação mais usada em 2021?',
+      'respostas': [
+        {'texto': 'Java', 'pontuacao': 0},
+        {'texto': 'Python', 'pontuacao': 1},
+        {'texto': 'C++', 'pontuacao': 0},
+        {'texto': 'JavaScript', 'pontuacao': 0},
+      ],
+    },
+    {
+      'texto': 'Qual a data de lançamento do Java??',
+      'respostas': [
+        {'texto': '1995', 'pontuacao': 1},
+        {'texto': '1968', 'pontuacao': 0},
+        {'texto': '2001', 'pontuacao': 0},
+        {'texto': '1925', 'pontuacao': 0},
+      ],
+    },
+    {
+      'texto': 'Quem foi o criador da Lâmpada?',
+      'respostas': [
+        {'texto': 'Elon Musk', 'pontuacao': 0},
+        {'texto': 'Nikola Tesla', 'pontuacao': 0},
+        {'texto': 'Thomas Edison', 'pontuacao': 1},
+        {'texto': 'Isaac Newton', 'pontuacao': 0},
+      ],
+    }
+  ];
 
-  void _responder() {
+  void _responder(int pontuacao) {
     if (temPerguntaSelecionada) {
       setState(() {
         _perguntaSelecionada++;
+        _pontuacaoTotal += pontuacao;
       });
     }
+  }
+
+  void _reiniciarQuestionario() {
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
+    });
   }
 
   bool get temPerguntaSelecionada {
@@ -45,23 +68,19 @@ class _PerguntaAppState extends State<PerguntaApp> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> respostas = temPerguntaSelecionada
-        ? _perguntas[_perguntaSelecionada].cast()['respostas']
-        : [];
-
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Perguntas'),
         ),
         body: temPerguntaSelecionada
-            ? Column(
-                children: [
-                  Questao(_perguntas[_perguntaSelecionada]['texto'].toString()),
-                  ...respostas.map((t) => Resposta(t, _responder)).toList(),
-                ],
+            ? Questionario(
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                quandoResponder: _responder,
               )
-            : null,
+            : Resultado(_pontuacaoTotal, _reiniciarQuestionario),
       ),
     );
   }
